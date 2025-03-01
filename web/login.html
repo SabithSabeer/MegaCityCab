@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="shortcut icon" href="IMAGES/LOGO.jpg" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Mega City Cab</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+<header>
+   <div class="header">
+    <div class="logo">
+        <img src="IMAGES/Logo.png" alt="Mega City Cab Logo">
+    </div>
+   </div>
+</header>
+
+<div class="login-container">
+    <div class="login-form">
+        <h2>Login</h2>
+        <form action="/your-login-action" method="POST">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <button type="submit" class="login-btn">Login <i class="fa-solid fa-arrow-right"></i></button>
+
+            <div class="signup-link">
+                <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/JS/app.js"></script>
+</body>
+</html>
