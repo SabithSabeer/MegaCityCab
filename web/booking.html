@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Booking - Mega City Cab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/booking.css">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="IMAGES/Logo.png" alt="Mega City Cab Logo">
+            </div>
+            <div class="header-links">
+                <a href="customer_home.html">Home</a>
+                <a href="view-booking.html">Booking History</a>
+                <a href="profile.html">Profile</a>
+                <a href="logout.html">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Booking Form Section -->
+    <section class="booking-form-section">
+        <div class="container">
+            <h1>Book Your Ride</h1>
+            <p>Please fill in the details below to book your ride.</p>
+            
+            <form action="submit-booking.php" method="POST" class="booking-form">
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" required placeholder="Enter your address">
+                </div>
+
+                <div class="form-group">
+                    <label for="telephone">Telephone Number:</label>
+                    <input type="tel" id="telephone" name="telephone" required placeholder="Enter your telephone number">
+                </div>
+
+                <div class="form-group">
+                    <label for="destination">Destination:</label>
+                    <input type="text" id="destination" name="destination" required placeholder="Enter your destination">
+                </div>
+
+                <div class="form-group">
+                    <label for="pickup-date">Pickup Date and Time:</label>
+                    <input type="datetime-local" id="pickup-date" name="pickup_date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="special-request">Special Requests (Optional):</label>
+                    <textarea id="special-request" name="special_request" placeholder="Any special requirements or requests"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="submit-button">Book Now</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Mega City Cab. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

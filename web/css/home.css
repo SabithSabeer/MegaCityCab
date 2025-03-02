@@ -1,0 +1,117 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Header Section */
+header {
+    background-color: #333;
+    padding: 20px 0;
+    color: white;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header .logo img {
+    height: 50px;
+}
+
+header .header-links {
+    display: flex;
+    gap: 20px;
+}
+
+header .header-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+header .header-links a:hover {
+    text-decoration: underline;
+}
+
+/* Main Content Section */
+.main-content {
+    background-color: #f4f4f4;
+    padding: 40px 0;
+}
+
+.main-content .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.main-content h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.main-content .welcome-message {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+.service-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.service-option {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 30%;
+}
+
+.service-option h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.service-option p {
+    font-size: 16px;
+    color: #777;
+    margin-bottom: 15px;
+}
+
+.service-option .button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+.service-option .button:hover {
+    background-color: #2980b9;
+}
+
+/* Footer Section */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer p {
+    font-size: 14px;
+}
