@@ -23,18 +23,8 @@
     <div class="signup-container">
         <div class="signup-form">
             <h2>Create an Account</h2>
-
-            <!-- Display Success or Error Messages -->
-            <div class="message">
-                <p style="color: red;">
-                    ${errorMessage}
-                </p>
-                <p style="color: green;">
-                    ${successMessage}
-                </p>
-            </div>
-
-            <form action="signup" method="POST">
+            
+            <form action="signup" method="POST" id="signupForm">
                 <div class="input-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" placeholder="Enter your username" required>
@@ -48,6 +38,7 @@
                 <div class="input-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <small>Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.</small>
                 </div>
 
                 <div class="input-group">
@@ -73,4 +64,7 @@
             </form>
         </div>
     </div>
+
+
 </body>
+</html>

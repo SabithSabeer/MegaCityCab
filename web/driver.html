@@ -1,15 +1,77 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Dashboard | Mega City Cab</title>
+    <link rel="stylesheet" href="css/driver.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="IMAGES/Logo.png" alt="Mega City Cab">
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="driverhome.html">Home</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="rides.html">My Rides</a></li>
+                <li><a href="logout.html">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="dashboard">
+        <div class="profile-summary">
+            <h2>Welcome, Driver</h2>
+            <div class="profile-picture">
+                <img src="IMAGES/driver.jpg" alt="Driver Profile">
+            </div>
+            <button class="edit-profile-btn">Edit Profile</button>
+        </div>
+
+        <div class="rides-section">
+            <h3>Assigned Rides</h3>
+            <table class="rides-table">
+                <thead>
+                    <tr>
+                        <th>Ride ID</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#R1234</td>
+                        <td>John Doe</td>
+                        <td>Pending</td>
+                        <td>$50</td>
+                        <td>
+                            <button class="accept-btn">Accept</button>
+                            <button class="decline-btn">Decline</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#R1235</td>
+                        <td>Jane Smith</td>
+                        <td>Completed</td>
+                        <td>$30</td>
+                        <td>N/A</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="total-info">
+                <p>Total Rides: 10</p>
+                <p>Total Amount Paid: $500</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Mega City Cab. All rights reserved.</p>
+    </footer>
+</body>
 </html>

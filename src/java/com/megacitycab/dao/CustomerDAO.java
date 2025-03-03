@@ -1,47 +1,41 @@
 package com.megacitycab.dao;
 
-import com.megacitycab.config.DBConn;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.megacitycab.models.Customer;
+import java.sql.*;
 
 public class CustomerDAO {
-    private Connection connection;
+    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=MegaCityCab;encrypt=true;trustServerCertificate=true";
+    private static final String USER = "sa";
+    private static final String PASSWORD = "sql";
 
-    public CustomerDAO() {
-        this.connection = DBConn.getConnection();
+    public boolean isEmailExists(String email) throws SQLException {
+        String query = "SELECT email FROM customer WHERE email = ?";
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        }
     }
 
-   public boolean registerCustomer(String username, String email, String password, String phone, String address, String nic) {
-    String query = "INSERT INTO customer (username, email, password, phone, address, nic) VALUES (?, ?, ?, ?, ?, ?)";
+    public boolean registerCustomer(Customer customer) {
+        String query = "INSERT INTO customer (username, email, password, phone, address, nic) VALUES (?, ?, ?, ?, ?, ?)";
 
-    try (PreparedStatement stmt = connection.prepareStatement(query)) {
-        stmt.setString(1, username);
-        stmt.setString(2, email);
-        stmt.setString(3, password);  // Consider hashing the password
-        stmt.setString(4, phone);
-        stmt.setString(5, address);
-        stmt.setString(6, nic);
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
-        return stmt.executeUpdate() > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
+            stmt.setString(1, customer.getUsername());
+            stmt.setString(2, customer.getEmail());
+            stmt.setString(3, customer.getPassword()); // Hashed password
+            stmt.setString(4, customer.getPhone());
+            stmt.setString(5, customer.getAddress());
+            stmt.setString(6, customer.getNic());
+
+            int rowsInserted = stmt.executeUpdate();
+            return rowsInserted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-}
-
-public boolean isUserExists(String username, String email, String nic) {
-    String query = "SELECT customer_id FROM customer WHERE username = ? OR email = ? OR nic = ?";
-    try (PreparedStatement stmt = connection.prepareStatement(query)) {
-        stmt.setString(1, username);
-        stmt.setString(2, email);
-        stmt.setString(3, nic);
-        ResultSet rs = stmt.executeQuery();
-        return rs.next(); // Returns true if user exists
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
-    }
-}
 }

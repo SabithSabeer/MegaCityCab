@@ -1,123 +1,144 @@
-/* General Styles */
-* {
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
 }
 
-/* Header Section */
+/* Header styles */
 header {
-    background-color: #333;
-    padding: 20px 0;
-    color: white;
-}
-
-header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+    background-color: #222;
+    padding: 15px 20px;
 }
 
-header .logo img {
-    height: 50px;
+.logo img {
+    width: 120px;
 }
 
-header .header-links {
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     display: flex;
-    gap: 20px;
 }
 
-header .header-links a {
+.navbar ul li {
+    margin: 0 15px;
+}
+
+.navbar ul li a {
     color: white;
     text-decoration: none;
-    font-weight: 500;
+    font-size: 16px;
+    transition: 0.3s;
 }
 
-header .header-links a:hover {
-    text-decoration: underline;
+.navbar ul li a:hover {
+    color: #ffcc00;
 }
 
-/* Booking Form Section */
-.booking-form-section {
+/* Booking container */
+.booking-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     background-color: #f4f4f4;
-    padding: 40px 0;
-}
-
-.booking-form-section .container {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.booking-form-section h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
-}
-
-.booking-form-section p {
-    font-size: 18px;
-    margin-bottom: 30px;
-    color: #555;
 }
 
 .booking-form {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-    margin-bottom: 20px;
-    text-align: left;
-}
-
-.form-group label {
-    font-size: 16px;
-    margin-bottom: 8px;
-    display: block;
-    color: #333;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.form-group input[type="datetime-local"] {
-    padding: 8px;
-}
-
-.form-group button.submit-button {
-    padding: 12px 20px;
-    background-color: #3498db;
-    color: white;
-    font-size: 18px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.form-group button.submit-button:hover {
-    background-color: #2980b9;
-}
-
-/* Footer Section */
-footer {
-    background-color: #333;
-    color: white;
-    padding: 20px 0;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
     text-align: center;
 }
 
-footer p {
+.booking-form h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Input group styles */
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
     font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Button styles */
+button, input[type="submit"] {
+    width: 100%;
+    background-color: #ffcc00;
+    color: #222;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+button:hover, input[type="submit"]:hover {
+    background-color: #e6b800;
+}
+
+/* Fare estimate section */
+#totalFare {
+    font-size: 16px;
+    margin-top: 10px;
+    color: #333;
+}
+
+/* Back button styles */
+.back-btn {
+    width: 100%;
+    background-color: #555;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background-color: #333;
+}
+
+/* Footer styles for login or redirect link */
+.login-link p {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #ff6600;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
 }

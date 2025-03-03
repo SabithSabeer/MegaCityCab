@@ -1,79 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="shortcut icon" href="IMAGES/Logo.png" type="image/x-icon">
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Mega City Cab</title>
+    <title>Login | Mega City Cab</title>
     <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
+    <header>
+        <div class="logo">
+            <img src="IMAGES/Logo.png" alt="Mega City Cab">
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="signup.html">SignUp</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="login-container">
+        <div class="login-form">
+            <h2>Login to Your Account</h2>
+            
+            <form action="login" method="POST" id="loginForm">
+                <div class="input-group">
+                    <label for="accountType">Account Type</label>
+                    <select id="accountType" name="accountType" required>
+                        <option value="customer">Customer</option>
+                        <option value="driver">Driver</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
 
-<header>
-   <div class="header">
-    <div class="logo">
-        <img src="IMAGES/Logo.png" alt="Mega City Cab Logo">
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <button type="submit" class="login-btn">Login</button>
+                
+                <div class="signup-link">
+                    <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+                </div>
+                 <!-- Display error message if there is an error -->
+                <div class="error-message">
+                    <p style="color:red;">${errorMessage}</p>
+                </div>
+                
+              
+            </form>
+        </div>
     </div>
-   </div>
-</header>
-
-<div class="login-container">
-    <div class="login-form">
-        <h2>Login</h2>
-
-        <!-- Display error message using JavaScript -->
-        <div id="error-message" class="error-message"></div>
-
-        <form action="LoginServlet" method="POST">
-            <div class="input-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username" required>
-            </div>
-
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            </div>
-
-            <div class="input-group">
-                <label for="category">Category</label>
-                <select id="category" name="category" required>
-                    <option value="customer">Customer</option>
-                    <option value="driver">Driver</option>
-                </select>
-            </div>
-
-            <button type="submit" class="login-btn">Login <i class="fa-solid fa-arrow-right"></i></button>
-
-            <div class="signup-link">
-                <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
-            </div>
-        </form>
-    </div>
-</div>
-
-<script>
-    // Function to extract query parameters and show error message
-    function getQueryParams() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const error = urlParams.get('error');
-        const success = urlParams.get('loginMessage');
-
-        if (error) {
-            document.getElementById('error-message').innerText = error;
-            document.getElementById('error-message').style.display = 'block';
-        }
-
-        if (success) {
-            alert(success); // Display success as alert or handle it as per your need
-        }
-    }
-
-    // Call the function when the page loads
-    window.onload = getQueryParams;
-</script>
-
 </body>
 </html>

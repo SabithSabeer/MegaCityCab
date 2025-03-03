@@ -1,63 +1,61 @@
 package com.megacitycab.servlet;
 
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.sql.*;
 import com.megacitycab.config.DBConn;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-@WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("username");
+        String accountType = request.getParameter("accountType");
+        String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String category = request.getParameter("category"); // Get selected category (customer/driver)
 
-        // Establish DB connection
+        System.out.println("Account Type: " + accountType);
+        System.out.println("Email: " + email);
+        System.out.println("Password: " + password);
+
+        // Initialize JDBC connection using DBConn class
         try (Connection conn = DBConn.getConnection()) {
+            String query = "";
 
-            if (conn == null) {
-                response.sendRedirect("login.html?error=Database connection failed");
-                return;
+            // Select query based on account type (driver or customer)
+            if ("driver".equals(accountType)) {
+                query = "SELECT * FROM driver WHERE LOWER(email) = LOWER(?) AND password = ?";
+            } else if ("customer".equals(accountType)) {
+                query = "SELECT * FROM customer WHERE LOWER(email) = LOWER(?) AND password = ?";
             }
 
-            String table = category; // Use selected category (either "customer" or "driver")
-            String query = "SELECT username, password FROM " + table + " WHERE username = ? AND password = ?";
-            
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setString(1, username);
+                stmt.setString(1, email);
                 stmt.setString(2, password);
-                ResultSet rs = stmt.executeQuery();
 
-                if (rs.next()) {
-                    // If user is found, set session and redirect
-                    HttpSession session = request.getSession();
-                    session.setAttribute("username", username);
-
-                    if (category.equals("customer")) {
-                        session.setAttribute("loginMessage", "Login successful! Welcome, customer.");
-                        response.sendRedirect("home.html"); // Redirect to customer home page
-                    } else if (category.equals("driver")) {
-                        session.setAttribute("loginMessage", "Login successful! Welcome, driver.");
-                        response.sendRedirect("driver.html"); // Redirect to driver home page
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        // Account found, redirect to respective dashboard
+                        if ("driver".equals(accountType)) {
+                            response.sendRedirect("driver.html");
+                        } else {
+                            response.sendRedirect("home.html");
+                        }
+                    } else {
+                        // Account not found, display error message
+                        System.out.println("Account not found in the database.");
+                        request.setAttribute("errorMessage", "No account found with the provided email and password.");
+                        RequestDispatcher dispatcher = request.getRequestDispatcher("login.html");
+                        dispatcher.forward(request, response);
                     }
-                } else {
-                    // If no match is found, redirect with error message
-                    response.sendRedirect("login.html?error=Invalid username or password");
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-            response.sendRedirect("login.html?error=Something went wrong");
+            request.setAttribute("errorMessage", "Database error occurred. Please try again later.");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("login.html");
+            dispatcher.forward(request, response);
         }
     }
 }
+

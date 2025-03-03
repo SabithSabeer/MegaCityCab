@@ -3,77 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Booking - Mega City Cab</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <title>Book a Cab</title>
     <link rel="stylesheet" href="css/booking.css">
+    <script>
+        // Function to calculate the fare
+        function calculateFare() {
+            const vehicleType = document.getElementById('vehicleType').value;
+            const pickupLocation = document.getElementById('pickupLocation').value;
+            const destinationLocation = document.getElementById('destinationLocation').value;
+            const baseFare = getBaseFare(vehicleType);
+            const perKmFare = getPerKmFare(vehicleType);
+
+            // Fetch the distance between pickup and destination (use a real API here, e.g., Google Maps)
+            const distance = getDistance(pickupLocation, destinationLocation); // Mock function
+            const totalFare = baseFare + (distance * perKmFare);
+
+            document.getElementById('totalFare').innerText = 'Estimated Fare: $' + totalFare;
+        }
+
+        // Mock function to get base fare based on vehicle type
+        function getBaseFare(vehicleType) {
+            if (vehicleType === 'sedan') return 10;
+            if (vehicleType === 'suv') return 15;
+            return 0;
+        }
+
+        // Mock function to get per km fare based on vehicle type
+        function getPerKmFare(vehicleType) {
+            if (vehicleType === 'sedan') return 2;
+            if (vehicleType === 'suv') return 3;
+            return 0;
+        }
+
+        // Mock function to calculate distance between locations (You can integrate Google Maps API here)
+        function getDistance(pickup, destination) {
+            // This would normally call an API to calculate the distance, but we'll mock it for now
+            return 10; // Assume 10 km for now
+        }
+
+        // Function to submit the booking form
+        function submitBooking() {
+            // Here, you would submit the booking details to your server (backend)
+            alert('Booking confirmed!');
+        }
+    </script>
 </head>
 <body>
-
-    <!-- Header Section -->
     <header>
-        <div class="container">
-            <div class="logo">
-                <img src="IMAGES/Logo.png" alt="Mega City Cab Logo">
-            </div>
-            <div class="header-links">
-                <a href="customer_home.html">Home</a>
-                <a href="view-booking.html">Booking History</a>
-                <a href="profile.html">Profile</a>
-                <a href="logout.html">Logout</a>
-            </div>
-        </div>
-    </header>
+    <div class="logo">
+        <img src="IMAGES/Logo.png" alt="Mega City Cab">
+    </div>
+    <nav class="navbar">
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="booking.html">Booking</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+    <h1>Book a Cab</h1>
+    <form onsubmit="event.preventDefault(); submitBooking();">
+        <label for="pickupLocation">Pickup Location:</label>
+        <input type="text" id="pickupLocation" required><br><br>
 
-    <!-- Booking Form Section -->
-    <section class="booking-form-section">
-        <div class="container">
-            <h1>Book Your Ride</h1>
-            <p>Please fill in the details below to book your ride.</p>
-            
-            <form action="submit-booking.php" method="POST" class="booking-form">
-                <div class="form-group">
-                    <label for="name">Full Name:</label>
-                    <input type="text" id="name" name="name" required placeholder="Enter your full name">
-                </div>
+        <label for="destinationLocation">Destination Location:</label>
+        <input type="text" id="destinationLocation" required><br><br>
 
-                <div class="form-group">
-                    <label for="address">Address:</label>
-                    <input type="text" id="address" name="address" required placeholder="Enter your address">
-                </div>
+        <label for="vehicleType">Select Vehicle Type:</label>
+        <select id="vehicleType" required>
+            <option value="sedan">Sedan</option>
+            <option value="suv">SUV</option>
+        </select><br><br>
 
-                <div class="form-group">
-                    <label for="telephone">Telephone Number:</label>
-                    <input type="tel" id="telephone" name="telephone" required placeholder="Enter your telephone number">
-                </div>
+        <button type="button" onclick="calculateFare()">Get Fare Estimate</button><br><br>
+        <span id="totalFare">Estimated Fare: $0</span><br><br>
 
-                <div class="form-group">
-                    <label for="destination">Destination:</label>
-                    <input type="text" id="destination" name="destination" required placeholder="Enter your destination">
-                </div>
-
-                <div class="form-group">
-                    <label for="pickup-date">Pickup Date and Time:</label>
-                    <input type="datetime-local" id="pickup-date" name="pickup_date" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="special-request">Special Requests (Optional):</label>
-                    <textarea id="special-request" name="special_request" placeholder="Any special requirements or requests"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <button type="submit" class="submit-button">Book Now</button>
-                </div>
-            </form>
-        </div>
-    </section>
-
-    <!-- Footer Section -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Mega City Cab. All rights reserved.</p>
-        </div>
-    </footer>
-
+        <input type="submit" value="Confirm Booking">
+    </form>
 </body>
 </html>
