@@ -3,82 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book a Cab</title>
-    <link rel="stylesheet" href="css/booking.css">
-    <script>
-        // Function to calculate the fare
-        function calculateFare() {
-            const vehicleType = document.getElementById('vehicleType').value;
-            const pickupLocation = document.getElementById('pickupLocation').value;
-            const destinationLocation = document.getElementById('destinationLocation').value;
-            const baseFare = getBaseFare(vehicleType);
-            const perKmFare = getPerKmFare(vehicleType);
-
-            // Fetch the distance between pickup and destination (use a real API here, e.g., Google Maps)
-            const distance = getDistance(pickupLocation, destinationLocation); // Mock function
-            const totalFare = baseFare + (distance * perKmFare);
-
-            document.getElementById('totalFare').innerText = 'Estimated Fare: $' + totalFare;
-        }
-
-        // Mock function to get base fare based on vehicle type
-        function getBaseFare(vehicleType) {
-            if (vehicleType === 'sedan') return 10;
-            if (vehicleType === 'suv') return 15;
-            return 0;
-        }
-
-        // Mock function to get per km fare based on vehicle type
-        function getPerKmFare(vehicleType) {
-            if (vehicleType === 'sedan') return 2;
-            if (vehicleType === 'suv') return 3;
-            return 0;
-        }
-
-        // Mock function to calculate distance between locations (You can integrate Google Maps API here)
-        function getDistance(pickup, destination) {
-            // This would normally call an API to calculate the distance, but we'll mock it for now
-            return 10; // Assume 10 km for now
-        }
-
-        // Function to submit the booking form
-        function submitBooking() {
-            // Here, you would submit the booking details to your server (backend)
-            alert('Booking confirmed!');
-        }
-    </script>
+    <title>Book a Cab - Mega City Cab</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-    <div class="logo">
-        <img src="IMAGES/Logo.png" alt="Mega City Cab">
-    </div>
-    <nav class="navbar">
-        <ul>
-            <li><a href="home.html">Home</a></li>
-            <li><a href="booking.html">Booking</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </nav>
-</header>
-    <h1>Book a Cab</h1>
-    <form onsubmit="event.preventDefault(); submitBooking();">
-        <label for="pickupLocation">Pickup Location:</label>
-        <input type="text" id="pickupLocation" required><br><br>
+        <h1>Book Your Ride with Mega City Cab</h1>
+    </header>
 
-        <label for="destinationLocation">Destination Location:</label>
-        <input type="text" id="destinationLocation" required><br><br>
+    <section class="booking-form">
+        <form id="bookingForm">
+            <label for="pickupLocation">Pickup Location:</label>
+            <input type="text" id="pickupLocation" name="pickupLocation" required>
 
-        <label for="vehicleType">Select Vehicle Type:</label>
-        <select id="vehicleType" required>
-            <option value="sedan">Sedan</option>
-            <option value="suv">SUV</option>
-        </select><br><br>
+            <label for="destination">Destination:</label>
+            <input type="text" id="destination" name="destination" required>
 
-        <button type="button" onclick="calculateFare()">Get Fare Estimate</button><br><br>
-        <span id="totalFare">Estimated Fare: $0</span><br><br>
+            <label for="pickupDateTime">Date & Time:</label>
+            <input type="datetime-local" id="pickupDateTime" name="pickupDateTime" required>
 
-        <input type="submit" value="Confirm Booking">
-    </form>
+            <label for="vehicleType">Vehicle Type:</label>
+            <select id="vehicleType" name="vehicleType" required>
+                <!-- Vehicle options will be populated dynamically -->
+            </select>
+
+            <label for="passengerCount">Number of Passengers:</label>
+            <input type="number" id="passengerCount" name="passengerCount" required min="1">
+
+            <label for="specialRequests">Special Requests:</label>
+            <textarea id="specialRequests" name="specialRequests"></textarea>
+
+            <label for="promoCode">Promo Code:</label>
+            <input type="text" id="promoCode" name="promoCode">
+
+            <p id="fareEstimate">Estimated Fare: $0</p>
+
+            <button type="submit">Confirm Booking</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>Contact us at support@megacitycab.com</p>
+    </footer>
+
+    <script src="booking.js"></script>
 </body>
 </html>
