@@ -1,26 +1,33 @@
+/* General Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
 }
 
 body {
     display: flex;
+    height: 100vh;
+    background-color: #f4f4f4;
 }
 
+/* Sidebar */
 .sidebar {
     width: 250px;
-    background: #2c3e50;
+    height: 100vh;
+    background-color: #222;
     color: white;
     padding: 20px;
-    height: 100vh;
     position: fixed;
+    left: 0;
+    top: 0;
 }
 
 .sidebar h2 {
     text-align: center;
     margin-bottom: 20px;
+    font-size: 22px;
 }
 
 .sidebar ul {
@@ -29,62 +36,112 @@ body {
 }
 
 .sidebar ul li {
-    padding: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 20px 0;
 }
 
 .sidebar ul li a {
-    color: white;
     text-decoration: none;
+    color: white;
     display: block;
+    padding: 10px;
+    font-size: 16px;
+    transition: 0.3s;
+    border-radius: 5px;
 }
 
-.sidebar ul li:hover {
-    background: #34495e;
+.sidebar ul li a:hover {
+    background-color: #ffcc00;
+    color: black;
 }
 
+/* Main Content */
 .main-content {
     margin-left: 250px;
     padding: 20px;
     width: calc(100% - 250px);
 }
 
-header {
-    background: #3498db;
+header h1 {
+    background-color: #222;
     color: white;
     padding: 15px;
     text-align: center;
+    border-radius: 5px;
 }
 
+/* Dashboard Cards */
 .cards {
     display: flex;
-    gap: 20px;
+    justify-content: space-around;
     margin-top: 20px;
 }
 
 .card {
-    background: white;
+    background-color: white;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    flex: 1;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+    width: 30%;
+    transition: 0.3s;
 }
 
 .card h3 {
+    font-size: 20px;
     margin-bottom: 10px;
 }
 
+.card p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
 .card a {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 15px;
-    background: #3498db;
-    color: white;
     text-decoration: none;
+    background-color: #ffcc00;
+    color: black;
+    padding: 10px 15px;
+    display: inline-block;
     border-radius: 5px;
+    font-size: 14px;
+    transition: 0.3s;
 }
 
 .card a:hover {
-    background: #2980b9;
+    background-color: #e6b800;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+    
+    .main-content {
+        margin-left: 200px;
+        width: calc(100% - 200px);
+    }
+
+    .cards {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .card {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
 }
