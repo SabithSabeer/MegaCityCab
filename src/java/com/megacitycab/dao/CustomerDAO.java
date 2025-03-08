@@ -1,7 +1,9 @@
 package com.megacitycab.dao;
 
 import com.megacitycab.models.Customer;
+import com.megacitycab.models.ManageCustomer;
 import java.sql.*;
+import java.util.List;
 
 public class CustomerDAO {
     private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=MegaCityCab;encrypt=true;trustServerCertificate=true";
@@ -37,5 +39,9 @@ public class CustomerDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public List<ManageCustomer> getAllCustomers() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

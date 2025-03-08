@@ -9,7 +9,7 @@ public class Customer {
     private String address;
     private String nic;
 
-    public Customer(String username, String email, String password, String phone, String address, String nic) {
+    public Customer(int customerId, String username, String email, String password, String phone, String address, String nic) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -39,4 +39,8 @@ public class Customer {
 
     public String getNic() { return nic; }
     public void setNic(String nic) { this.nic = nic; }
+
+    String getCreatedAt() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

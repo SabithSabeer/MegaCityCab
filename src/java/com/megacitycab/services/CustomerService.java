@@ -30,8 +30,9 @@ public class CustomerService {
                 e.printStackTrace();
                 return "Error: Password hashing failed!";
             }
+            int customerId = 0;
 
-            Customer customer = new Customer(username, email, hashedPassword, phone, address, nic);
+            Customer customer = new Customer(customerId, username, email, hashedPassword, phone, address, nic);
             boolean isRegistered = customerDAO.registerCustomer(customer);
 
             return isRegistered ? "Registration successful!" : "Error: Registration failed.";

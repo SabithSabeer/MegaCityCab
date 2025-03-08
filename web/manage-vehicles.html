@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Vehicle Types</title>
+    <link rel="stylesheet" href="css/manage-vehicletype.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>MegaCityCab Admin</h2>
+        <ul>
+            <li><a href="admin.html">Dashboard</a></li>
+            <li><a href="manage-driver.html">Manage Drivers</a></li>
+            <li><a href="manage-customer.html">Manage Customers</a></li>
+            <li><a href="manage-admin.html">Manage Admins</a></li>
+            <li><a href="manage-vehicles.html">Manage Vehicle Types</a></li>
+            <li><a href="index.html">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>Manage Vehicle Types</h1>
+        </header>
+
+        <!-- Add New Vehicle Form -->
+        <section class="form-container">
+            <h2>Add New Vehicle Type</h2>
+            <form id="vehicleForm">
+                <input type="hidden" id="vehicleId">
+                <input type="text" id="vehicleType" placeholder="Vehicle Type" required>
+                <input type="number" id="baseFare" placeholder="Base Fare (LKR)" required>
+                <input type="number" id="perKmFare" placeholder="Per Km Fare (LKR)" required>
+                <button type="submit">Save Vehicle</button>
+            </form>
+        </section>
+
+        <!-- Vehicle Types Table -->
+        <section class="table-container">
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Vehicle ID</th>
+                        <th>Vehicle Type</th>
+                        <th>Base Fare</th>
+                        <th>Per Km Fare</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="vehicleTableBody">
+                    <!-- Data will be inserted here dynamically -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script>
+        // Fetch vehicle data from the servlet
+        function fetchVehicleTypes() {
+            fetch("ManageVehicleServlet")
+                .then(response => response.json())
+                .then(data => {
+                    let tableBody = document.getElementById("vehicleTableBody");
+                    tableBody.innerHTML = "";
+
+                    data.forEach(vehicle => {
+                        let row = `<tr>
+                            <td>${vehicle.vehicleId}</td>
+                            <td>${vehicle.vehicleType}</td>
+                            <td>LKR ${vehicle.baseFare.toFixed(2)}</td>
+                            <td>LKR ${vehicle.perKmFare.toFixed(2)}</td>
+                            <td>
+                                <button onclick="editVehicle(${vehicle.vehicleId}, '${vehicle.vehicleType}', ${vehicle.baseFare}, ${vehicle.perKmFare})">Edit</button>
+                                <button onclick="deleteVehicle(${vehicle.vehicleId})">Delete</button>
+                            </td>
+                        </tr>`;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error("Error fetching vehicle data:", error));
+        }
+
+        // Add or Update Vehicle
+        document.getElementById("vehicleForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let vehicleId = document.getElementById("vehicleId").value;
+            let vehicleType = document.getElementById("vehicleType").value;
+            let baseFare = document.getElementById("baseFare").value;
+            let perKmFare = document.getElementById("perKmFare").value;
+
+            let requestData = {
+                vehicleId: vehicleId ? parseInt(vehicleId) : 0,
+                vehicleType: vehicleType,
+                baseFare: parseFloat(baseFare),
+                perKmFare: parseFloat(perKmFare)
+            };
+
+            fetch("ManageVehicleServlet", {
+                method: vehicleId ? "PUT" : "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.text())
+            .then(() => {
+                document.getElementById("vehicleForm").reset();
+                document.getElementById("vehicleId").value = "";
+                fetchVehicleTypes();
+            })
+            .catch(error => console.error("Error saving vehicle:", error));
+        });
+
+        // Edit Vehicle
+        function editVehicle(id, type, base, perKm) {
+            document.getElementById("vehicleId").value = id;
+            document.getElementById("vehicleType").value = type;
+            document.getElementById("baseFare").value = base;
+            document.getElementById("perKmFare").value = perKm;
+        }
+
+        // Delete Vehicle
+        function deleteVehicle(id) {
+            if (confirm("Are you sure you want to delete this vehicle?")) {
+                fetch(`ManageVehicleServlet?vehicleId=${id}`, { method: "DELETE" })
+                    .then(() => fetchVehicleTypes())
+                    .catch(error => console.error("Error deleting vehicle:", error));
+            }
+        }
+
+        // Load vehicle data on page load
+        window.onload = fetchVehicleTypes;
+    </script>
+</body>
+</html>
