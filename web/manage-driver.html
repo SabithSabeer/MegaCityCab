@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Drivers</title>
+  <link rel="stylesheet" href="css/manage-driver.css">
+</head>
+<body>
+  <div class="sidebar">
+    <h2>MegaCityCab Admin</h2>
+    <ul>
+      <li><a href="admin.html">Dashboard</a></li>
+      <li><a href="manage-driver.html">Manage Drivers</a></li>
+      <li><a href="manage-customer.html">Manage Customers</a></li>
+      <li><a href="manage-admin.html">Manage Admins</a></li>
+      <li><a href="manage-vehicles.html">Manage Vehicle Types</a></li>
+      <li><a href="index.html">Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <header>
+      <h1>Manage Drivers</h1>
+    </header>
+
+    <!-- Add New Driver Form -->
+    <section class="form-container">
+      <h2>Add New Driver</h2>
+      <form id="driverForm">
+        <input type="hidden" id="driverId">
+        <input type="text" id="firstName" placeholder="First Name" required>
+        <input type="text" id="lastName" placeholder="Last Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="text" id="phone" placeholder="Phone" required>
+        <input type="file" id="profilePicture" accept="image/*">
+        
+        <!-- Vehicle Type dropdown populated dynamically -->
+        <select id="vehicleTypeDropdown">
+    <option value="" disabled selected>Select Vehicle Type</option>
+</select>
+
+        
+        <input type="text" id="vehicleNo" placeholder="Vehicle Number" required>
+        <select id="status" required>
+          <option value="" disabled selected>Select Status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+        <button type="submit">Save Driver</button>
+      </form>
+    </section>
+
+    <!-- Drivers Table -->
+    <section class="table-container">
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Driver ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Vehicle Type</th>
+            <th>Vehicle No</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="driverTableBody">
+          <!-- Driver data will be inserted here dynamically -->
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    // Fetch driver data from the servlet
+    function fetchDrivers() {
+      fetch("ManageDriverServlet")
+        .then(response => response.json())
+        .then(data => {
+          let tableBody = document.getElementById("driverTableBody");
+          tableBody.innerHTML = "";
+          data.forEach(driver => {
+            let row = `<tr>
+              <td>${driver.driver_id}</td>
+              <td>${driver.first_name}</td>
+              <td>${driver.last_name}</td>
+              <td>${driver.email}</td>
+              <td>${driver.phone}</td>
+              <td>${driver.vehicle_type}</td>
+              <td>${driver.vehicle_no}</td>
+              <td>${driver.status}</td>
+              <td>
+                <button onclick="editDriver(${driver.driver_id}, '${driver.first_name}', '${driver.last_name}', '${driver.email}', '${driver.phone}', '${driver.vehicle_type}', '${driver.vehicle_no}', '${driver.status}')">Edit</button>
+                <button onclick="deleteDriver(${driver.driver_id})">Delete</button>
+              </td>
+            </tr>`;
+            tableBody.innerHTML += row;
+          });
+        })
+        .catch(error => console.error("Error fetching driver data:", error));
+    }
+
+    // Fetch vehicle types from the database
+    function fetchVehicleTypes() {
+      fetch("ManageVehicleTypeServlet")
+        .then(response => response.json())
+        .then(data => {
+          let vehicleTypeSelect = document.getElementById("vehicleType");
+          data.forEach(vehicle => {
+            let option = document.createElement("option");
+            option.value = vehicle.vehicle_type;
+            option.textContent = vehicle.vehicle_type;
+            vehicleTypeSelect.appendChild(option);
+          });
+        })
+        .catch(error => console.error("Error fetching vehicle types:", error));
+    }
+
+    // Add or Update Driver
+    document.getElementById("driverForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      
+      let driverId = document.getElementById("driverId").value;
+      let firstName = document.getElementById("firstName").value;
+      let lastName = document.getElementById("lastName").value;
+      let email = document.getElementById("email").value;
+      let password = document.getElementById("password").value;
+      let phone = document.getElementById("phone").value;
+      let vehicleType = document.getElementById("vehicleType").value;
+      let vehicleNo = document.getElementById("vehicleNo").value;
+      let status = document.getElementById("status").value;
+      
+      // Profile picture upload handling (optional)
+      let profilePicture = document.getElementById("profilePicture").files[0];
+      
+      let requestData = {
+        driver_id: driverId ? parseInt(driverId) : 0,
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        password: password,
+        phone: phone,
+        vehicle_type: vehicleType,
+        vehicle_no: vehicleNo,
+        status: status,
+        profile_picture: profilePicture ? profilePicture.name : null // Optional: save file name or handle upload separately
+      };
+
+      fetch("ManageDriverServlet", {
+        method: driverId ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestData)
+      })
+      .then(response => response.text())
+      .then(() => {
+        document.getElementById("driverForm").reset();
+        document.getElementById("driverId").value = "";
+        fetchDrivers();
+      })
+      .catch(error => console.error("Error saving driver:", error));
+    });
+
+    // Edit Driver
+    function editDriver(id, firstName, lastName, email, phone, vehicleType, vehicleNo, status) {
+      document.getElementById("driverId").value = id;
+      document.getElementById("firstName").value = firstName;
+      document.getElementById("lastName").value = lastName;
+      document.getElementById("email").value = email;
+      document.getElementById("password").value = ""; // Leave password blank on edit for security reasons
+      document.getElementById("phone").value = phone;
+      document.getElementById("vehicleType").value = vehicleType;
+      document.getElementById("vehicleNo").value = vehicleNo;
+      document.getElementById("status").value = status;
+    }
+
+    // Delete Driver
+    function deleteDriver(id) {
+      if (confirm("Are you sure you want to delete this driver?")) {
+        fetch(`ManageDriverServlet?driver_id=${id}`, { method: "DELETE" })
+          .then(() => fetchDrivers())
+          .catch(error => console.error("Error deleting driver:", error));
+      }
+    }
+
+    // Load vehicle types and driver data on page load
+    window.onload = function() {
+      fetchVehicleTypes();
+      fetchDrivers();
+    };
+  </script>
+</body>
+</html>

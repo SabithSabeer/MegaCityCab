@@ -145,16 +145,12 @@
     }
 
     // Delete Customer
-    async function deleteCustomer(id) {
-        if (!confirm("Are you sure you want to delete this customer?")) return;
-
-        try {
-            const response = await fetch(`ManageCustomerServlet?customerId=${id}`, { method: "DELETE" });
-            if (!response.ok) throw new Error("Failed to delete customer");
-            fetchCustomers(); // Refresh list
-        } catch (error) {
-            console.error("Error deleting customer:", error);
-        }
+   function deleteCustomer(id) {
+    if (confirm("Are you sure you want to delete this customer?")) {
+        fetch(`ManageCustomerServlet?customerId=${id}`, { method: "DELETE" })
+            .then(() => fetchCustomers()) // Refresh the customer list after deletion
+            .catch(error => console.error("Error deleting customer:", error));
+    }
     }
 
     // Load customers on page load

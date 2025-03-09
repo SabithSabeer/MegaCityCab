@@ -119,48 +119,15 @@ public class ManageCustomerServlet extends HttpServlet {
     }
 
     // DELETE method to delete a customer
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        BufferedReader reader = request.getReader();
-        JsonObject json = gson.fromJson(reader, JsonObject.class);
-
-        if (json == null || !json.has("customer_id")) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\": \"Missing customer_id.\"}");
-            return;
-        }
-
-        int customerId = json.get("customer_id").getAsInt();
-
-        try (Connection conn = DBConn.getConnection();
-             PreparedStatement checkStmt = conn.prepareStatement("SELECT customer_id FROM customer WHERE customer_id = ?");
-             PreparedStatement deleteStmt = conn.prepareStatement("DELETE FROM customer WHERE customer_id = ?")) {
-
-            // Check if the customer exists
-            checkStmt.setInt(1, customerId);
-            ResultSet rs = checkStmt.executeQuery();
-
-            if (!rs.next()) {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                response.getWriter().write("{\"error\": \"Customer ID not found.\"}");
-                return;
-            }
-
-            // Proceed with deletion
-            deleteStmt.setInt(1, customerId);
-            int rowsDeleted = deleteStmt.executeUpdate();
-
-            if (rowsDeleted > 0) {
-                response.setStatus(HttpServletResponse.SC_OK);
-                response.getWriter().write("{\"message\": \"Customer deleted successfully.\"}");
-            } else {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.getWriter().write("{\"error\": \"Failed to delete customer.\"}");
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\": \"Error while deleting customer.\"}");
-        }
+protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    int customerId = Integer.parseInt(request.getParameter("customerId"));
+    try (Connection conn = DBConn.getConnection();
+         PreparedStatement stmt = conn.prepareStatement("DELETE FROM customer WHERE customer_id = ?")) {
+        stmt.setInt(1, customerId);
+        stmt.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
     }
 }
