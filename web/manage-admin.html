@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Admins - MegaCityCab</title>
+    <link rel="stylesheet" href="css/manage-customer.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>MegaCityCab Admin</h2>
+        <ul>
+            <li><a href="admin-dashboard.html">Dashboard</a></li>
+            <li><a href="manage-driver.html">Manage Drivers</a></li>
+            <li><a href="manage-customer.html">Manage Customers</a></li>
+            <li><a href="manage-admin-login.html">Manage Admins</a></li>
+            <li><a href="manage-vehicles.html">Manage Vehicle Types</a></li>
+            <li><a href="index.html">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>Manage Admins</h1>
+        </header>
+
+        <!-- Add / Update Admin Form -->
+        <section class="form-container">
+            <h2>Add / Update Admin</h2>
+            <form id="adminForm">
+                <input type="hidden" id="adminId">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password (Leave empty if not changing)">
+                <input type="text" id="phone" placeholder="Phone Number" required>
+                <input type="text" id="nic" placeholder="NIC" required>
+                <button type="submit">Save Admin</button>
+            </form>
+        </section>
+
+        <!-- Admin List Table -->
+        <section class="table-container">
+            <h2>Admin List</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>NIC</th>
+                        <th>Created At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="adminTableBody"></tbody>
+            </table>
+        </section>
+    </div>
+
+    <script>
+    // Fetch admin data from the servlet
+    async function fetchAdmins() {
+        try {
+            const response = await fetch("ManageAdminServlet");
+            if (!response.ok) throw new Error("Failed to fetch admins");
+            const data = await response.json();
+            renderAdmins(data);
+        } catch (error) {
+            console.error("Error fetching admin data:", error);
+            alert("Failed to load admin data. Please try again later.");
+        }
+    }
+
+    // Render admins into the table
+    function renderAdmins(admins) {
+        const tableBody = document.getElementById("adminTableBody");
+        tableBody.innerHTML = "";
+        admins.forEach(admin => {
+            let createdAt = new Date(admin.created_at);
+            let formattedDate = createdAt.toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' });
+            
+            let row = tableBody.insertRow();
+            row.innerHTML = `
+                <td>${admin.admin_id}</td>
+                <td>${admin.username}</td>
+                <td>${admin.email}</td>
+                <td>${admin.phone}</td>
+                <td>${admin.nic}</td>
+                <td>${formattedDate}</td>
+                <td>
+                    <button onclick="editAdmin(${admin.admin_id}, '${admin.username}', '${admin.email}', '${admin.phone}', '${admin.nic}')">Edit</button>
+                    <button onclick="deleteAdmin(${admin.admin_id})">Delete</button>
+                </td>
+            `;
+        });
+    }
+
+    // Handle admin form submission (Add/Update)
+    document.getElementById("adminForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+        const adminId = document.getElementById("adminId").value;
+        const username = document.getElementById("username").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const phone = document.getElementById("phone").value;
+        const nic = document.getElementById("nic").value;
+
+        let requestData = {
+            admin_id: adminId ? parseInt(adminId) : 0,
+            username,
+            email,
+            phone,
+            nic
+        };
+
+        // Only send password if provided
+        if (password.trim()) requestData.password = password;
+
+        try {
+            const response = await fetch("ManageAdminServlet", {
+                method: adminId ? "PUT" : "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(requestData)
+            });
+
+            if (!response.ok) throw new Error("Failed to save admin");
+
+            document.getElementById("adminForm").reset();
+            document.getElementById("adminId").value = "";
+            fetchAdmins(); // Refresh admin list
+        } catch (error) {
+            console.error("Error saving admin:", error);
+            alert("Error saving admin data. Please try again.");
+        }
+    });
+
+    // Edit Admin
+    function editAdmin(id, username, email, phone, nic) {
+        document.getElementById("adminId").value = id;
+        document.getElementById("username").value = username;
+        document.getElementById("email").value = email;
+        document.getElementById("phone").value = phone;
+        document.getElementById("nic").value = nic;
+        document.getElementById("password").value = ""; // Reset password field on edit
+    }
+
+    // Delete Admin
+    async function deleteAdmin(id) {
+        if (confirm("Are you sure you want to delete this admin?")) {
+            try {
+                const response = await fetch(`ManageAdminServlet?admin_id=${id}`, { method: "DELETE" });
+                if (!response.ok) throw new Error("Failed to delete admin");
+                fetchAdmins(); // Refresh the admin list after deletion
+            } catch (error) {
+                console.error("Error deleting admin:", error);
+                alert("Error deleting admin. Please try again.");
+            }
+        }
+    }
+
+    // Load admins on page load
+    window.onload = fetchAdmins;
+    </script>
+
+</body>
+</html>

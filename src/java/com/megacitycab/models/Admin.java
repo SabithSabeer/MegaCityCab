@@ -1,27 +1,23 @@
 package com.megacitycab.models;
 
-import java.time.LocalDateTime;
-
 public class Admin {
-    private int adminId;
-    private String username;
-    private String email;
-    private String password;
-    private String phone;
-    private String nic;
-    private LocalDateTime createdAt;
+    private int id;  // Ensure this field exists
+    private String username, email, phone, nic, password;
 
-    public Admin(int adminId, String username, String email, String password, String phone, String nic, LocalDateTime createdAt) {
-        this.adminId = adminId;
+    public Admin(int id, String username, String email, String phone, String nic, String password) {
+        this.id = id;
         this.username = username;
         this.email = email;
-        this.password = password;
         this.phone = phone;
         this.nic = nic;
-        this.createdAt = createdAt;
+        this.password = password;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    public String getUsername() { return username; }
+    public String getEmail() { return email; }
+    public String getPhone() { return phone; }
+    public String getNic() { return nic; }
+    public String getPassword() { return password; }
 }

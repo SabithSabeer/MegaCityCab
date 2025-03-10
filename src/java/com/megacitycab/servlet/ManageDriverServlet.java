@@ -1,79 +1,54 @@
 package com.megacitycab.servlet;
 
-import com.megacitycab.models.Driver;  // Ensure you are using the correct Driver class
-import com.megacitycab.services.ManageDriverService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.megacitycab.dao.DriverDAO;
+import com.megacitycab.models.Driver;
+import com.megacitycab.models.VehicleType;
 
-import javax.servlet.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.SQLException;
+import java.io.*;
 import java.util.List;
 
+@WebServlet("/ManageDriverServlet")
 public class ManageDriverServlet extends HttpServlet {
+    private final DriverDAO driverDAO = new DriverDAO();
+    private final Gson gson = new Gson();
 
-    private ManageDriverService driverService;
-
-    @Override
-    public void init() throws ServletException {
-        // Initialize the service class (which will be responsible for DB interactions)
-        driverService = new ManageDriverService();
-    }
-
-    @Override
+    // Handle GET request (Fetch drivers)
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Driver> drivers = driverDAO.getAllDrivers();
         response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        try {
-            List<Driver> drivers = driverService.getAllDrivers();  // Change to Driver class
-            // Convert list of drivers to JSON using Jackson
-            ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(drivers);
-
-            PrintWriter out = response.getWriter();
-            out.print(json);
-            out.flush();
-        } catch (SQLException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            e.printStackTrace();
-        }
+        response.getWriter().write(gson.toJson(drivers));
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Handle driver creation or update here (we will implement in service class)
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        // Read JSON data from the request
-        ObjectMapper objectMapper = new ObjectMapper();
-        Driver driver = objectMapper.readValue(request.getReader(), Driver.class);  // Change to Driver class
-
-        try {
-            if (driver.getDriverId() == 0) {
-                driverService.addDriver(driver); // Add a new driver
-            } else {
-                driverService.updateDriver(driver); // Update an existing driver
-            }
-            response.setStatus(HttpServletResponse.SC_OK);
-        } catch (SQLException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            e.printStackTrace();
-        }
+    // Handle POST request (Add driver)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Driver driver = gson.fromJson(request.getReader(), Driver.class);
+        boolean success = driverDAO.addDriver(driver);
+        response.setStatus(success ? HttpServletResponse.SC_CREATED : HttpServletResponse.SC_BAD_REQUEST);
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String driverId = request.getParameter("driver_id");
+    // Handle PUT request (Update driver)
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Driver driver = gson.fromJson(request.getReader(), Driver.class);
+        boolean success = driverDAO.updateDriver(driver);
+        response.setStatus(success ? HttpServletResponse.SC_OK : HttpServletResponse.SC_BAD_REQUEST);
+    }
 
-        try {
-            driverService.deleteDriver(Integer.parseInt(driverId)); // Delete driver by ID
-            response.setStatus(HttpServletResponse.SC_OK);
-        } catch (SQLException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            e.printStackTrace();
-        }
+    // Handle DELETE request (Delete driver)
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int driverId = Integer.parseInt(request.getParameter("driver_id"));
+        boolean success = driverDAO.deleteDriver(driverId);
+        response.setStatus(success ? HttpServletResponse.SC_OK : HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    // Handle GET request to fetch vehicle types for the dropdown
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<VehicleType> vehicleTypes = driverDAO.getAllVehicleTypes();
+        response.setContentType("application/json");
+        response.getWriter().write(gson.toJson(vehicleTypes));
     }
 }

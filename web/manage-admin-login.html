@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MegaCityCab</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <script>
+        function checkLogin() {
+            const username = prompt("Please enter your admin username:");
+            const password = prompt("Please enter your admin password:");
+
+            // You can validate the credentials here with backend AJAX or another way.
+            if (username === "admin" && password === "password123") {
+                window.location.href = "manage-admin.html"; // Redirect to Manage Admin page if valid credentials
+            } else {
+                alert("Incorrect username or password!");
+            }
+        }
+        window.onload = checkLogin;
+    </script>
+</head>
+<body>
+    <div>
+        <h2>Login to Access Admin Panel</h2>
+    </div>
+</body>
+</html>
